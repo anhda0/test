@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giới thiệu bản thân</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --border: #e5e7eb;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a;
+        --card: #1e293b;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #818cf8;
+        --accent-soft: #312e81;
+        --border: #334155;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 16px;
+    }
+    .container { max-width: 760px; margin: 0 auto; }
+    header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: grid; place-items: center;
+      font-size: 36px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    h1 { font-size: 28px; }
+    .role { color: var(--muted); margin-top: 4px; }
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 32px;
+      margin-top: 20px;
+    }
+    section p + p { margin-top: 10px; }
+    h2 { font-size: 18px; margin-bottom: 12px; color: var(--accent); }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+    }
+
+    /* Hành trình */
+    .timeline { list-style: none; padding-left: 0; border-left: 2px solid var(--border); }
+    .timeline li { position: relative; padding-left: 20px; margin-bottom: 16px; }
+    .timeline li::before {
+      content: "";
+      position: absolute; left: -7px; top: 6px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+    .timeline .time { font-size: 13px; font-weight: 600; color: var(--accent); }
+
+    /* Số liệu cộng đồng */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .stat {
+      background: var(--accent-soft);
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+    .stat .num { font-size: 28px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+    .stat .label { font-size: 14px; color: var(--muted); }
+
+    .funfact { border-left: 4px solid #f59e0b; }
+    .funfact h2 { color: #f59e0b; }
+
+    .contact a { color: var(--accent); text-decoration: none; }
+    footer { text-align: center; color: var(--muted); font-size: 14px; margin-top: 24px; }
+
+    /* ===== Animation ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      0%   { opacity: 0; transform: scale(0.6); }
+      70%  { opacity: 1; transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+    @keyframes ring {
+      0%   { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.45); }
+      100% { box-shadow: 0 0 0 18px rgba(79, 70, 229, 0); }
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0) scale(1); }
+      20%           { transform: translateY(-6px) scale(1.1); }
+      40%           { transform: translateY(0) scale(0.95); }
+    }
+
+    /* Các khối xuất hiện lần lượt */
+    header, section, footer {
+      opacity: 0;
+      animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    header                  { animation-delay: 0.05s; }
+    section:nth-of-type(1)  { animation-delay: 0.15s; }
+    section:nth-of-type(2)  { animation-delay: 0.25s; }
+    section:nth-of-type(3)  { animation-delay: 0.35s; }
+    section:nth-of-type(4)  { animation-delay: 0.45s; }
+    section:nth-of-type(5)  { animation-delay: 0.55s; }
+    section:nth-of-type(6)  { animation-delay: 0.65s; }
+    section:nth-of-type(7)  { animation-delay: 0.75s; }
+    footer                  { animation-delay: 0.85s; }
+
+    /* Hover thẻ nội dung */
+    header, section {
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    header:hover, section:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      border-color: var(--accent);
+    }
+    .funfact:hover { border-color: #f59e0b; }
+
+    /* Avatar: hiện ra, gradient chuyển màu và vòng sáng lan toả */
+    .avatar {
+      background: linear-gradient(135deg, #4f46e5, #ec4899, #f59e0b, #4f46e5);
+      background-size: 300% 300%;
+      animation:
+        popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both,
+        gradientShift 6s ease infinite,
+        ring 2.4s ease-out 1s infinite;
+    }
+
+    /* Emoji nảy nhẹ */
+    .emoji {
+      display: inline-block;
+      animation: bounce 2.4s ease-in-out 1s infinite;
+    }
+
+    /* Thẻ kỹ năng */
+    .tag {
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+      transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+      cursor: default;
+    }
+    .tag:nth-child(1) { animation-delay: 0.45s; }
+    .tag:nth-child(2) { animation-delay: 0.52s; }
+    .tag:nth-child(3) { animation-delay: 0.59s; }
+    .tag:nth-child(4) { animation-delay: 0.66s; }
+    .tag:nth-child(5) { animation-delay: 0.73s; }
+    .tag:nth-child(6) { animation-delay: 0.80s; }
+    .tag:hover {
+      transform: translateY(-3px) scale(1.05);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Thẻ số liệu */
+    .stat { transition: transform 0.25s ease; }
+    .stat:hover { transform: scale(1.03); }
+
+    /* Danh sách */
+    li { transition: transform 0.25s ease, color 0.25s ease; }
+    ul:not(.timeline) li:hover { transform: translateX(6px); color: var(--accent); }
+
+    /* Tôn trọng người dùng tắt hiệu ứng chuyển động */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      header, section, footer, .tag { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="avatar">VA</div>
+      <div>
+        <h1>Hê lô, mình là Vân Anh <span class="emoji">😍</span></h1>
+        <p class="role">Marketing Fintech · Gen Z thích khám phá và xông pha</p>
+      </div>
+    </header>
+
+    <section>
+      <h2>Về mình</h2>
+      <p>
+        Mình là Vân Anh, một Gen Z chính hiệu, thích khám phá và xông pha.
+        Mình bắt đầu đi làm từ cuối năm 2 đại học, chính xác là ngày 15/06/2022.
+      </p>
+      <p>Đến nay, mình đã có <strong>3 năm kinh nghiệm làm Marketing trong lĩnh vực Fintech</strong>.</p>
+    </section>
+
+    <section>
+      <h2>Hành trình</h2>
+      <ul class="timeline">
+        <li>
+          <div class="time">15/06/2022</div>
+          Bắt đầu đi làm với vị trí Thực tập sinh Marketing tại Simplize, khi đang học năm 2 đại học.
+        </li>
+        <li>
+          <div class="time">Thời sinh viên</div>
+          Vừa đi học vừa đi làm, cùng bạn bè xây dựng HUBwarts Agency tại Đại học Ngân hàng TP.HCM.
+        </li>
+        <li>
+          <div class="time">Hiện tại</div>
+          3 năm kinh nghiệm Marketing trong lĩnh vực Fintech.
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Dự án cộng đồng: HUBwarts Agency</h2>
+      <p>
+        Cùng một vài người bạn, người chị, mình đã xây dựng nên HUBwarts Agency, một dự án cộng đồng
+        có sức ảnh hưởng và thu hút lượt tương tác số 1 tại Đại học Ngân hàng TP.HCM (HUB).
+        Nếu bạn là sinh viên HUB, chắc hẳn bạn từng nghe qua hai cái tên này:
+      </p>
+      <div class="stats">
+        <div class="stat">
+          <div class="num" data-count="22500">22,500+</div>
+          <div class="label">người theo dõi HUBwarts, Học viện phép thuật HUB</div>
+        </div>
+        <div class="stat">
+          <div class="num" data-count="47600">47,600+</div>
+          <div class="label">thành viên nhóm Động HUB, cộng đồng sinh viên Ngân hàng</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="funfact">
+      <h2>💡 Fun fact</h2>
+      <p>Do mình tạch hết CLB nên cuộc đời đã đẩy mình đi làm sớm và có cái dự án này.</p>
+    </section>
+
+    <section>
+      <h2>Kỹ năng</h2>
+      <div class="tags">
+        <span class="tag">Marketing Fintech</span>
+        <span class="tag">Content Marketing</span>
+        <span class="tag">Social Media</span>
+        <span class="tag">Xây dựng cộng đồng</span>
+        <span class="tag">Phân tích dữ liệu</span>
+        <span class="tag">Lên kế hoạch chiến dịch</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Mình viết về gì?</h2>
+      <p>
+        Trên blog, mình ghi lại những gì đã học và "nghiệm" được trong hành trình "học làm người".
+        Nếu thấy thú vị, giá trị thì hãy cho mình 1 subscribe nhé!
+      </p>
+      <ul style="margin-top: 10px;">
+        <li>Phát triển bản thân</li>
+        <li>Nghiệp làm còn ten</li>
+        <li>Những chuyện bên lề khi đi học, đi làm,… hay gì gì đó</li>
+      </ul>
+    </section>
+
+    <section class="contact">
+      <h2>Liên hệ</h2>
+      <p>Email: <a href="mailto:anhdtv.2002@gmail.com">anhdtv.2002@gmail.com</a></p>
+    </section>
+
+    <footer>© 2026 Vân Anh</footer>
+  </div>
+
+  <script>
+    // Đếm số tăng dần khi khối số liệu hiện ra
+    (function () {
+      var nums = document.querySelectorAll('.num[data-count]');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var el = entry.target;
+          var target = +el.dataset.count;
+          var start = null;
+          function step(t) {
+            if (!start) start = t;
+            var p = Math.min((t - start) / 1600, 1);
+            var eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(target * eased).toLocaleString('en-US') + '+';
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+          observer.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      nums.forEach(function (el) { el.textContent = '0+'; observer.observe(el); });
+    })();
+  </script>
+</body>
+</html>
